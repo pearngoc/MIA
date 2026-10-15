@@ -1,0 +1,27 @@
+{
+  "_note": "FILE MẪU, chỉ minh họa định dạng, số liệu là giả. Copy ra results/<model>/<task>/<attack>.json rồi điền số thật. Không sửa tên trường.",
+  "model": "patchtst",
+  "task": "cls",
+  "attack": "lira",
+  "owner_tv": 2,
+  "level": "record",
+  "dataset": "ptbxl",
+  "seed": 42,
+  "n_member": 10000,
+  "n_nonmember": 10000,
+  "scores_member": [0.91, 0.87, 0.95],
+  "scores_nonmember": [0.12, 0.40, 0.08],
+  "scores_note": "Lưu đủ n_member và n_nonmember điểm; quy ước điểm càng cao càng có khả năng là member. Ở đây chỉ rút gọn 3 giá trị.",
+  "tpr_at_0.1fpr": 0.021,
+  "tpr_at_1fpr": 0.083,
+  "auc": 0.612,
+  "bootstrap_ci": {
+    "n_resamples": 1000,
+    "confidence": 0.95,
+    "tpr_at_0.1fpr": [0.014, 0.029],
+    "tpr_at_1fpr": [0.069, 0.098]
+  },
+  "utility": {"train_acc": 0.93, "test_acc": 0.81, "gap": 0.12},
+  "n_shadow": 16,
+  "extra": {}
+}

@@ -51,14 +51,27 @@ Bản này thay thế hướng TUH-EEG + LSTM/TCN trong `Research.md`, giữ ngu
 
 ## 7. Phân công 4 thành viên
 
-| TV | Vai trò | Sản phẩm |
-|---|---|---|
-| 1 | Data & Protocol | Pipeline PTB-XL/HAR, split record/user-level, protocol thống kê (≥10k non-member, bootstrap) |
-| 2 | Models | Train LSTM/TCN, PatchTST, iTransformer; fine-tune foundation model; bảng utility và gap (RQ1, RQ2) |
-| 3 | Attacks | Loss/Conf/Entropy, LiRA, RMIA, Temporal Feature; module TPR@FPR và ROC log–log |
-| 4 | Literature & Writing | Cập nhật gap, trích dẫn, phân tích RQ3, báo cáo, slide |
+Chia theo model: mỗi người sở hữu trọn pipeline (train, tấn công, phân tích) cho một model, cả classification và forecasting.
 
-Cả nhóm đọc paper nền ở tuần 1. TV1 và TV3 phối hợp cho RQ4; TV2 và TV3 phối hợp cho RQ1–RQ2.
+| TV | Model chính | Paper của model | Phần dùng chung (phụ) |
+|---|---|---|---|
+| 1 | LSTM, TCN (baseline) | Koren 2025, Johansson 2025, Shokri 2017 | Data & protocol: pipeline PTB-XL, split record/user-level, ≥10k non-member, bootstrap |
+| 2 | PatchTST | Nie 2023, Carlini 2022 (LiRA), Ye 2022 | Attack lib: Loss/Conf/Entropy, LiRA, module TPR@FPR và ROC log–log |
+| 3 | iTransformer (+DLinear nếu kịp) | Liu 2024, Zarifzadeh 2024 (RMIA), Watson 2022 | RMIA + Temporal Feature (đưa vào attack lib của TV2) |
+| 4 | Foundation: MOMENT hoặc Chronos-Bolt (full vs LoRA) | Goswami 2024, Ansari 2024, Duan 2024 | Literature & report: kiểm chứng G1–G3 với tài liệu 2025–2026, trích dẫn, ghép báo cáo và slide |
+
+### Output của mỗi người
+
+Schema chung: `results/<model>/<task>/<attack>.json` (xem `results/README.md`): scores member/non-member, TPR @ 0,1% và 1% FPR, AUC, bootstrap CI.
+
+| TV | Output |
+|---|---|
+| 1 | Split cố định và `protocol.md` (seed, kích thước, bootstrap); bảng utility và gap LSTM/TCN; kết quả MIA LSTM/TCN; phân tích **RQ4** |
+| 2 | Attack lib có test, interface cố định; kết quả MIA PatchTST; ROC log–log gộp cả nhóm; phân tích **RQ1** (ghép số TV1, TV3) |
+| 3 | Cài RMIA và Temporal Feature; kết quả MIA iTransformer; phân tích **RQ3** |
+| 4 | Fine-tune foundation model, bảng số bước và full vs LoRA; kết quả MIA và phân tích **RQ2**; bảng gap G1–G3 đã kiểm chứng, bibliography; báo cáo và slide hoàn chỉnh |
+
+Mỗi người viết một section "Model X" (2–3 trang) trong báo cáo, TV4 ghép. Mốc W1: TV1 giao split và protocol, TV2 giao interface attack; các TV còn lại train baseline của mình.
 
 ## 8. Kế hoạch 5 tuần
 

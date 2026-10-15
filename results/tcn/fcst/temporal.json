@@ -1,0 +1,19 @@
+{
+  "model": "tcn",
+  "task": "fcst",
+  "attack": "temporal",
+  "owner_tv": 1,
+  "level": null,
+  "seed": null,
+  "n_member": null,
+  "n_nonmember": null,
+  "scores_member": null,
+  "scores_nonmember": null,
+  "tpr_at_0.1fpr": null,
+  "tpr_at_1fpr": null,
+  "auc": null,
+  "bootstrap_ci": {
+    "tpr_at_0.1fpr": null,
+    "tpr_at_1fpr": null
+  }
+}
