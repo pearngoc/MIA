@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+.env
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Datasets and model artifacts (large, regenerable)
+data/
+datasets/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.npy
+*.npz
