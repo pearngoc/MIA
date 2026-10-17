@@ -24,3 +24,9 @@ checkpoints/
 *.ckpt
 *.npy
 *.npz
+
+# Raw archives (large)
+*.zip
+
+# Shared split artifacts must be committed
+!dataset/splits/*.npz
