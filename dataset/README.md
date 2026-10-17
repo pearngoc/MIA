@@ -1,8 +1,8 @@
 # Config chung để các model so sánh được với nhau
 
-Mọi thành viên (LSTM/TCN, PatchTST, iTransformer, MOMENT) phải theo file này. Số liệu chỉ so sánh được khi mọi thứ ở mục 1–3 giống nhau. Mục nào khác thì ghi vào `extra` của JSON kết quả và nêu trong báo cáo.
+Mọi thành viên (LSTM/TCN, PatchTST, iTransformer, MOMENT) phải theo file này. Số liệu chỉ so sánh được khi mục 1, 2, 4, 5 giống nhau và mục 3 tuân đúng quy trình chọn. Mục nào khác thì ghi vào `extra` của JSON kết quả và nêu trong báo cáo.
 
-Quy ước: **[BẮT BUỘC]** = đã cố định bởi code dùng chung, không được đổi. **[THỐNG NHẤT]** = cả nhóm phải chọn cùng một giá trị, hiện chưa chốt. **[MOMENT]** = giá trị MOMENT đang dùng, các model khác điền cột của mình.
+Quy ước: **[BẮT BUỘC]** = đã cố định bởi code dùng chung, không được đổi.
 
 ## 1. Dữ liệu và split [BẮT BUỘC]
 
@@ -32,44 +32,64 @@ Một cấu hình duy nhất cho mọi model. Lấy theo MOMENT vì L = 512 là 
 | Chuẩn hóa | z-score theo từng lead trên từng bản ghi (cả cửa sổ L + H), giống nhau cho member và non-member |
 | Augmentation | không |
 
-## 3. Huấn luyện [THỐNG NHẤT]
+## 3. Huấn luyện [BẮT BUỘC cho quy trình, được chọn riêng epoch và lr]
 
-Generalization gap ảnh hưởng trực tiếp tới MIA (RQ1 hỏi "ở cùng gap"). Vì vậy phải báo cáo gap, và chỉ so sánh kiến trúc khi recipe công bằng.
+Generalization gap ảnh hưởng trực tiếp tới MIA (RQ1 hỏi "ở cùng gap"). Recipe fine-tune của MOMENT (10 epoch, lr 1e-4) có thể làm model train từ đầu bị underfit, khiến gap nhỏ và MIA yếu giả tạo. Vì vậy điều cần giống nhau là **quy trình chọn**, không phải con số epoch và lr.
 
-| Mục | [MOMENT] | Model của bạn |
+**Cố định chung:**
+
+| Mục | Giá trị |
+|---|---|
+| Tập train | toàn bộ `train` của split (member), không thêm gì |
+| Batch | 16 |
+| Optimizer | AdamW |
+| LR schedule | OneCycleLR |
+| Grad clip | 1.0 |
+| Loss | cls: CrossEntropy. fcst: MSE |
+| Precision | bf16 autocast (A100/L4), fp32 nếu GPU cũ |
+| Early stopping | không. Lấy epoch cuối |
+
+**Chọn riêng cho từng model (epoch tổng, max_lr):**
+
+| Mục | MOMENT (fine-tune) | Model khác (train từ đầu) |
 |---|---|---|
-| Tập train | toàn bộ `train` của split (member), không thêm gì | |
-| Epoch | 10 | |
-| Batch | 16 | |
-| Optimizer | AdamW | |
-| LR | OneCycleLR, max_lr 1e-4 (lr đầu = max/25) | |
-| Grad clip | 1.0 | |
-| Loss | cls: CrossEntropy. fcst: MSE | |
-| Precision | bf16 autocast (A100/L4), fp32 nếu GPU cũ | |
-| Early stopping / chọn checkpoint | không. Lấy epoch cuối đã eval | |
-| Epoch đánh giá MIA | 1, 2, 5, 10 (cho RQ2); số chính báo cáo ở epoch cuối | |
+| Epoch tổng | 10 | tự chọn |
+| max_lr | 1e-4 (lr đầu = max/25) | tự chọn |
 
-Quy tắc: **không chọn checkpoint hay hyperparameter dựa trên điểm MIA**. Chỉ được tune theo utility trên `val`. Không early stopping bằng test/non-member.
+Quy tắc chọn:
+- Chỉ tune theo **utility trên `val`** (cls: accuracy, fcst: MSE). Tuyệt đối không nhìn điểm MIA, không dùng non-member của `test`.
+- Cùng ngân sách tune cho mọi model: tối đa 6 cấu hình (epoch, max_lr) mỗi model và mỗi task, ghi lại cả 6 vào `extra`.
+- Phải báo cáo: utility, gap, epoch và max_lr cuối cùng. Khi so kiến trúc (RQ1) so ở gap tương đương và nêu rõ gap của từng model.
+- Nếu model vẫn underfit sau khi tune thì ghi thẳng vào báo cáo, đừng kết luận "ít rò hơn" chỉ từ TPR.
 
-## 4. Attack và score [BẮT BUỘC cho định dạng, THỐNG NHẤT cho tham số]
+**Epoch đánh giá MIA** (cho RQ2 và Temporal cls) lưu theo vị trí tương đối, làm tròn lên: 10%, 20%, 50% và 100% tổng epoch. Với 10 epoch là 1, 2, 5, 10 (đúng MOMENT). Ví dụ 50 epoch là 5, 10, 25, 50. Ghi danh sách epoch thật vào `extra.eval_epochs`. Số chính báo cáo ở epoch cuối.
 
-Quy ước chung: **điểm càng cao càng có khả năng là member.**
+**Shadow:** train bằng đúng recipe cuối cùng của target (epoch tổng, max_lr đã chọn), không tune lại.
 
-| Attack | Score | Task |
+Quy tắc chung: **không chọn checkpoint hay hyperparameter dựa trên điểm MIA.** Không early stopping bằng test/non-member.
+
+## 4. Attack và score [BẮT BUỘC]
+
+Một bộ attack và một bộ tham số duy nhất cho mọi model. Quy ước chung: **điểm càng cao càng có khả năng là member.**
+
+| Attack (tên trong `attack`) | Score | Task |
 |---|---|---|
-| Loss | cls: `-CE`. fcst: `-MSE` (trung bình trên lead và bước) | cls, fcst |
-| Confidence | `max softmax` | cls |
-| Entropy | `-H(p)` | cls |
-| LiRA online | log-likelihood ratio Gaussian. cls: φ = logit-scaled p đúng. fcst: φ = `-log(MSE)` | cả hai |
-| LiRA offline | z-score so với phân phối OUT | cả hai |
-| RMIA | cls: p(x) = p đúng. fcst: p(x) = `exp(-MSE/τ)`, τ = median MSE của shadow OUT. γ = 2.0, a = 0.3 (từ `.meta.json`), online và offline | cả hai |
-| Temporal | fcst: DFT + trend của residual (Koren). cls: quỹ đạo logit qua epoch 1, 2, 5, 10 (đặc thù MOMENT, model khác nếu không lưu checkpoint trung gian thì ghi `n/a`) | |
+| Loss (`loss`) | cls: `-CE`. fcst: `-MSE` (trung bình trên lead và bước) | cls, fcst |
+| Confidence (`conf`) | `max softmax` | cls |
+| Entropy (`entropy`) | `-H(p)` | cls |
+| LiRA online (`lira`) | log-likelihood ratio Gaussian, std chung toàn cục. cls: φ = `log(p/(1-p))` của lớp đúng. fcst: φ = `-log(MSE)` | cls, fcst |
+| LiRA offline (`lira_offline`) | z-score của φ so với phân phối OUT | cls, fcst |
+| RMIA offline (`rmia`) | cls: p(x) = softmax của lớp đúng. fcst: p(x) = `exp(-MSE/τ)`, τ = median MSE của shadow OUT (một giá trị chung, ×1.0). p̄ = ½((1+a)·p_OUT + (1−a)), γ = 2.0, a = 0.3 | cls, fcst |
+| RMIA online (`rmia_online`) | như trên nhưng p̄ = ½(p_IN + p_OUT) | cls, fcst |
+| Temporal (`temporal`) | fcst: DFT 8 dải + trend + drift + log MSE theo lead của residual (Koren). cls: quỹ đạo CE, entropy, margin qua bốn epoch đánh giá (mục 3) và độ dốc của chúng. Cả hai: gray-box, HistGradientBoosting (max_iter 200, lr 0.05), cross-fitting 5-fold | cls, fcst |
+
+Mọi model phải lưu logit (cls) hoặc dự đoán (fcst) của member và non-member ở bốn epoch đánh giá của mục 3 để chạy Temporal cls và RQ2.
 
 Shadow model cho LiRA/RMIA:
 - Dùng mask chung `splits/shadow_masks_record_K8_s42.npz` (K = 8, mỗi bản ghi nằm trong đúng 4 shadow). Tập tham chiếu `ref_ids` (5000 bản ghi) cũng lấy từ file này.
 - Shadow huấn luyện **cùng recipe với target** (mục 3), chỉ khác tập train.
-- Không dùng `ref_ids` hay shadow để chọn tham số attack. RMIA τ chọn trước (median OUT), bảng độ nhạy chỉ để báo cáo.
-- Temporal là gray-box: attacker có một ít nhãn member/non-member. Dùng cross-fitting 5-fold, classifier cố định từ trước (HistGradientBoosting, max_iter 200, lr 0.05).
+- Không dùng `ref_ids` hay shadow để chọn tham số attack. τ, γ, a cố định như trên. Bảng độ nhạy τ (×0.5, ×1, ×2) chỉ để báo cáo, file kết quả luôn dùng ×1.
+- Temporal là gray-box: attacker có một ít nhãn member/non-member, mỗi bản ghi được chấm bởi bộ phân loại chưa thấy nó.
 
 ## 5. Metric [BẮT BUỘC]
 
@@ -83,7 +103,7 @@ Shadow model cho LiRA/RMIA:
 
 Theo `../results/README.md` và `results/_sample.json`: `results/<model>/<task>/<attack>.json`, điểm lưu đủ cho cả member và non-member, tỉ lệ 0–1.
 
-Mỗi file phải ghi vào `extra` để đối chiếu: `epochs`, `eval_epoch`, `batch`, `max_lr`, `backbone`, và với fcst thêm `lookback`, `horizon`. Nhờ đó có thể kiểm tra mọi model chạy cùng recipe.
+Mỗi file phải ghi vào `extra` để đối chiếu: `epochs`, `eval_epoch`, `batch`, `max_lr`, `backbone`, và với fcst thêm `lookback`, `horizon`. Thêm `eval_epochs` và `tuning` (các cấu hình epoch, max_lr đã thử cùng utility trên `val`). Nhờ đó kiểm tra được mọi model theo cùng quy trình.
 
 **Tên file:** notebook MOMENT hiện ghi `<attack>_full.json`, còn quy ước repo là `<attack>.json`. Cần thống nhất một kiểu rồi đổi tên khi copy vào repo.
 

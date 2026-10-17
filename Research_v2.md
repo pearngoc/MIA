@@ -17,7 +17,7 @@ Bản này thay thế hướng TUH-EEG + LSTM/TCN trong `Research.md`, giữ ngu
 
 ## 2. Dataset
 
-- **Chính: PTB-XL.** ~21,8k bản ghi ECG, ~18,8k bệnh nhân, 10 giây, 100 Hz, có `patient_id`. Chọn 3 lead, cửa sổ L = 100. Forecast H = 20 trên cùng X.
+- **Chính: PTB-XL.** ~21,8k bản ghi ECG, ~18,8k bệnh nhân, 10 giây, 100 Hz, có `patient_id`. Dùng 12 lead, cửa sổ input L = 512 (nội suy từ 1000 điểm). Forecast H = 96 trên cùng X, tức cả bản ghi nội suy về L + H = 608 điểm.
 - **Phụ:** UCI HAR (classification, theo subject), ETTh1 (forecast, kiểm tra khái quát).
 - Phải xác nhận lại điều khoản và định dạng trên PhysioNet khi tải.
 

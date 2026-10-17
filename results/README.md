@@ -3,7 +3,7 @@
 Cấu trúc: `results/<model>/<task>/<attack>.json`
 
 - model: lstm, tcn (TV1), patchtst (TV2), itransformer (TV3), foundation (TV4)
-- task: cls (PTB-XL superclass), fcst (H = 20)
+- task: cls (PTB-XL superclass), fcst (L = 512, H = 96)
 - attack: loss, conf, entropy (chỉ cls), lira, rmia, temporal
 - level: chỉ `record` (ghi vào trường `level`)
 
