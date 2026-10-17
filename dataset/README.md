@@ -72,6 +72,8 @@ Quy tắc chung: **không chọn checkpoint hay hyperparameter dựa trên đi�
 
 Một bộ attack và một bộ tham số duy nhất cho mọi model. Quy ước chung: **điểm càng cao càng có khả năng là member.**
 
+Phải nộp đủ attack của task mình chạy: cls có tám (`loss`, `conf`, `entropy`, `lira`, `lira_offline`, `rmia`, `rmia_online`, `temporal`), fcst có sáu (bỏ `conf` và `entropy`). **Số chính trong báo cáo:** `loss`, `conf`, `entropy` (chỉ cls), `lira` (online), `rmia` (offline), `temporal`. **Chỉ để đối chiếu:** `lira_offline`, `rmia_online` (dùng chung 8 shadow nên không tốn thêm huấn luyện). Khi so model với nhau chỉ dùng số chính.
+
 | Attack (tên trong `attack`) | Score | Task |
 |---|---|---|
 | Loss (`loss`) | cls: `-CE`. fcst: `-MSE` (trung bình trên lead và bước) | cls, fcst |
@@ -104,8 +106,6 @@ Shadow model cho LiRA/RMIA:
 Theo `../results/README.md` và `results/_sample.json`: `results/<model>/<task>/<attack>.json`, điểm lưu đủ cho cả member và non-member, tỉ lệ 0–1.
 
 Mỗi file phải ghi vào `extra` để đối chiếu: `epochs`, `eval_epoch`, `batch`, `max_lr`, `backbone`, và với fcst thêm `lookback`, `horizon`. Thêm `eval_epochs` và `tuning` (các cấu hình epoch, max_lr đã thử cùng utility trên `val`). Nhờ đó kiểm tra được mọi model theo cùng quy trình.
-
-**Tên file:** notebook MOMENT hiện ghi `<attack>_full.json`, còn quy ước repo là `<attack>.json`. Cần thống nhất một kiểu rồi đổi tên khi copy vào repo.
 
 ## 7. Checklist trước khi nộp kết quả
 

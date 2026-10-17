@@ -4,7 +4,7 @@ Cấu trúc: `results/<model>/<task>/<attack>.json`
 
 - model: lstm, tcn (TV1), patchtst (TV2), itransformer (TV3), foundation (TV4)
 - task: cls (PTB-XL superclass), fcst (L = 512, H = 96)
-- attack: loss, conf, entropy (chỉ cls), lira, rmia, temporal
+- attack: loss, conf, entropy (chỉ cls), lira, lira_offline, rmia, rmia_online, temporal
 - level: chỉ `record` (ghi vào trường `level`)
 
 Trường `null` là chưa chạy. Người sở hữu model điền vào; không sửa file của người khác.
