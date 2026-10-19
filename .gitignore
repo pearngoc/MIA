@@ -1,32 +1,83 @@
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
 *.egg-info/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 .ipynb_checkpoints/
+*.egg
+dist/
+build/
 
-# Virtual environments
+# Virtual environments / secrets
 .venv/
 venv/
 .env
+.env.*
+!.env.example
 
 # IDE / OS
 .idea/
 .vscode/
+.cursor/
 .DS_Store
+Thumbs.db
 
-# Datasets and model artifacts (large, regenerable)
+# --- Large / regenerable artifacts (do not push) ---
+
+# Raw PTB-XL and archives (~GB). Keep only splits + helper scripts.
+dataset/ptb-xl*/
+dataset/**/records*/
+dataset/archive.zip
 data/
 datasets/
+*.zip
+
+# Model checkpoints / tensors / caches
+ckpt/
+ckpt_pull/
 checkpoints/
+outputs/
+runs/
+wandb/
+lightning_logs/
 *.pt
 *.pth
 *.ckpt
+*.bin
+*.safetensors
+*.onnx
+*.h5
+*.pkl
+*.pickle
 *.npy
 *.npz
+*.joblib
 
-# Raw archives (large)
-*.zip
+# Allow shared split meta (must be committed for reproducibility)
+!dataset/splits/
+!dataset/splits/**
+!dataset/README.md
+!dataset/make_split.py
 
-# Shared split artifacts must be committed
-!dataset/splits/*.npz
+# Papers (large PDFs; cite URLs instead of committing)
+/papers/
+!/papers/.gitkeep
+
+# Logs / temp
+*.log
+*.tmp
+tmp/
+temp/
+.cache/
+
+# Jupyter / Colab local dumps
+*.local.ipynb
+colab_secrets.*
+
+# Local k3s deployment for tuan-cao node (consolidated, do not commit)
+# Triển khai k3s local cho node tuan-cao (đã gom 1 file, không commit)
+k8s/*.local.yaml
+**/*.local.yaml

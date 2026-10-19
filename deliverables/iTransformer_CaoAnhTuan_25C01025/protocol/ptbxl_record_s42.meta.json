@@ -1,0 +1,60 @@
+{
+ "level": "record",
+ "seed": 42,
+ "n_val": 500,
+ "classes": [
+  "CD",
+  "HYP",
+  "MI",
+  "NORM",
+  "STTC"
+ ],
+ "sha256": "35dd8ca57797bed344db4bc8ff0f99b6f05e78add6c565bed54932d5687adce7",
+ "n_records_total": 16272,
+ "n_patients_total": 14641,
+ "sizes": {
+  "train": 8136,
+  "val": 500,
+  "test": 7636
+ },
+ "class_counts": {
+  "train": [
+   854,
+   268,
+   1269,
+   4542,
+   1203
+  ],
+  "val": [
+   54,
+   24,
+   91,
+   266,
+   65
+  ],
+  "test": [
+   801,
+   244,
+   1178,
+   4275,
+   1138
+  ]
+ },
+ "n_patients": {
+  "train": 7696,
+  "val": 497,
+  "test": 7211
+ },
+ "shadow": {
+  "file": "shadow_masks_record_K8_s42.npz",
+  "K": 8,
+  "sha256": "fbda57864ba16e9d50fd1bcb1c1c5287548511dc476a02924d494c36aa2a5dc9",
+  "n_ref": 5000,
+  "in_fraction": 0.5,
+  "rmia_defaults": {
+   "gamma": 2.0,
+   "a": 0.3,
+   "offline": true
+  }
+ }
+}
