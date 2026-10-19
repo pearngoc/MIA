@@ -36,3 +36,6 @@ work/
 
 /patchtst_results
 experiment/patchtst/**
+experiment/patchtst
+experiment/patchtst-bk
+experiment/patchtst-bk/**
