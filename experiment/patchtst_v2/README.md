@@ -1,12 +1,11 @@
 # PatchTST v2 (TV2): notebook tách từng bước
 
-`patchtst_v2_kaggle.ipynb` là bản viết lại của `experiment/patchtst/patchtst_kaggle.ipynb` theo khung của `experiment/tv1_lstm_tcn_kaggle.ipynb`.
-
 | | v1 (`experiment/patchtst/`) | v2 (folder này) |
 |---|---|---|
 | Cấu trúc | 1 cell `%%writefile` chứa cả `patchtst_mia.py` (720 dòng), chạy ngầm bằng `subprocess` | 15 bước, mỗi bước một cell có giải thích, biến nằm trong notebook |
 | Xem / dừng giữa chừng | Chỉ đọc được log | Chạy từng cell, in / vẽ được bất kỳ biến nào (`target`, `PHI_S`, `scores`…) |
-| Split chung | `git clone` repo (cần Internet) | Nhúng `make_split.py`, tự tạo lại split + kiểm sha256 (giống TV1, Internet tắt cũng được) |
+| Split chung | `git clone` repo, kiểm sha256 (nằm trong file `.py`) | Cũng `git clone` repo (vào `/tmp/MIA`) + kiểm sha256, nhưng là một cell riêng, in `OK` từng file |
+| Lấy PTB-XL | Add Input | Add Input, hoặc `kagglehub.dataset_download` tự tải nếu chưa add |
 | Task | cls và fcst song song trên 2 GPU | Một task mỗi lần chạy: đổi `TASK` ở bước 2 |
 | Resume | Checkpoint từng epoch | Bỏ qua từng cấu hình tune / target / shadow đã xong |
 | Số liệu | | **Giống v1**: cùng split, recipe, seed, công thức attack, schema JSON |
@@ -16,7 +15,7 @@
 ## Chạy trên Kaggle
 
 1. *File → Import Notebook* → chọn `patchtst_v2_kaggle.ipynb`.
-2. *Add Input* → dataset `khyeh0719/ptb-xl-dataset`. *Accelerator* → **GPU T4 x2**.
+2. *Settings*: **GPU T4 x2**, **Internet = On** (để clone repo). *Add Input* → dataset `khyeh0719/ptb-xl-dataset` (không add thì cell `kagglehub` tự tải, chậm hơn).
 3. Ở bước 2 đặt `TASK = 'cls'` (lần sau `'fcst'`).
 4. Học / thử: chạy từng cell. Chạy thật: **Save Version → Save & Run All (Commit)**.
    Thời gian trên T4: cls ≈ 1 giờ 45, fcst ≈ 2 giờ 40. `RUN_TUNE = False` bỏ qua tune (~50 phút), dùng cấu hình đã chọn ngày 18/10 (cls 20 epoch / 5e-4, fcst 50 epoch / 1e-3).
@@ -28,7 +27,8 @@ Muốn chạy lại phần attack mà không train lại: *Add Input → Noteboo
 
 | Bước | Nội dung | File tạo ra (trong `/kaggle/working`) |
 |---|---|---|
-| 1 | Tìm PTB-XL, tạo lại split chung, kiểm sha256 | `/tmp/patchtst_dataset/splits/` |
+| 0 | Cài `wfdb`, `kagglehub` lấy PTB-XL, kiểm GPU + vị trí `ptbxl_database.csv` | |
+| 1 | Clone repo nhóm, tìm PTB-XL, kiểm sha256 của split + shadow mask | `/tmp/MIA/` |
 | 2 | Cấu hình (`TASK`, `RUN_TUNE`, lưới tune) + chạy tiếp | |
 | 3 | Đọc 16.272 bản ghi, nội suy 1000 → 608, z-score; `idx_m` / `idx_v` / `idx_n`, `masks_pool` | `/tmp/cache_patchtst/` |
 | 4 | Model PatchTST (HF `transformers`), chạy thử 1 batch | |
