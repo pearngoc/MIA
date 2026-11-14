@@ -1,0 +1,197 @@
+{
+  "owner": "Cao Anh Tuấn",
+  "mshv": "25C01025",
+  "model": "itransformer",
+  "package": "iTransformer_CaoAnhTuan_25C01025",
+  "n_files": 33,
+  "total_bytes": 2645121,
+  "notes": "cls LiRA/RMIA polarity-aligned; k8s consolidated to code/k8s/itransformer_tuan-cao.local.yaml (local only, gitignored)",
+  "contents": {
+    "report": "report/iTransformer_RQ3.md",
+    "results_cls": [
+      "results/cls/conf.json",
+      "results/cls/entropy.json",
+      "results/cls/lira.json",
+      "results/cls/lira_offline.json",
+      "results/cls/loss.json",
+      "results/cls/rmia.json",
+      "results/cls/rmia_online.json",
+      "results/cls/temporal.json"
+    ],
+    "results_fcst": [
+      "results/fcst/lira.json",
+      "results/fcst/lira_offline.json",
+      "results/fcst/loss.json",
+      "results/fcst/rmia.json",
+      "results/fcst/rmia_online.json",
+      "results/fcst/temporal.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3637,
+      "sha256_16": "76162a4b4c3b4228"
+    },
+    {
+      "path": "code/itransformer/__init__.py",
+      "bytes": 425,
+      "sha256_16": "74f930b5e758c3f7"
+    },
+    {
+      "path": "code/itransformer/mia.py",
+      "bytes": 1687,
+      "sha256_16": "3f546bf3bc97151e"
+    },
+    {
+      "path": "code/itransformer/model.py",
+      "bytes": 4386,
+      "sha256_16": "88467ce6acf830ab"
+    },
+    {
+      "path": "code/itransformer/ptbxl.py",
+      "bytes": 5207,
+      "sha256_16": "6937884abee08475"
+    },
+    {
+      "path": "code/itransformer/temporal_cls.py",
+      "bytes": 6361,
+      "sha256_16": "a1b3f8e054bd8abe"
+    },
+    {
+      "path": "code/itransformer/temporal_fcst.py",
+      "bytes": 6107,
+      "sha256_16": "32ccd51cbb3db3b4"
+    },
+    {
+      "path": "code/itransformer/train_cls.py",
+      "bytes": 8826,
+      "sha256_16": "0e35fd667f01226f"
+    },
+    {
+      "path": "code/itransformer/train_fcst.py",
+      "bytes": 8899,
+      "sha256_16": "d0288ed3e4975e70"
+    },
+    {
+      "path": "code/itransformer/train_lira_rmia_cls.py",
+      "bytes": 11798,
+      "sha256_16": "f045397be194d78a"
+    },
+    {
+      "path": "code/itransformer/train_lira_rmia_fcst.py",
+      "bytes": 11571,
+      "sha256_16": "d56d942c27b726f1"
+    },
+    {
+      "path": "code/k8s/itransformer_tuan-cao.local.yaml",
+      "bytes": 11007,
+      "sha256_16": "8857578d19f9ca76"
+    },
+    {
+      "path": "code/setup.py",
+      "bytes": 387,
+      "sha256_16": "6549117f4c1e4c23"
+    },
+    {
+      "path": "protocol/Research_v2.md",
+      "bytes": 6352,
+      "sha256_16": "82d541d4281d2a00"
+    },
+    {
+      "path": "protocol/dataset_protocol.md",
+      "bytes": 9497,
+      "sha256_16": "e8056c74b2e21d1e"
+    },
+    {
+      "path": "protocol/ptbxl_record_s42.meta.json",
+      "bytes": 831,
+      "sha256_16": "eb1ecbfb41576eca"
+    },
+    {
+      "path": "report/iTransformer_RQ3.md",
+      "bytes": 10162,
+      "sha256_16": "96aa3133321492a2"
+    },
+    {
+      "path": "results/README_schema.md",
+      "bytes": 813,
+      "sha256_16": "a09ed50143981094"
+    },
+    {
+      "path": "results/_sample.json",
+      "bytes": 924,
+      "sha256_16": "f3a01b37eae9246e"
+    },
+    {
+      "path": "results/cls/conf.json",
+      "bytes": 160303,
+      "sha256_16": "e66c165748b6641c"
+    },
+    {
+      "path": "results/cls/entropy.json",
+      "bytes": 208886,
+      "sha256_16": "0f4e83bff9f60ed8"
+    },
+    {
+      "path": "results/cls/lira.json",
+      "bytes": 170448,
+      "sha256_16": "307b47289d3dff50"
+    },
+    {
+      "path": "results/cls/lira_offline.json",
+      "bytes": 163732,
+      "sha256_16": "096c22b74f5b08fd"
+    },
+    {
+      "path": "results/cls/loss.json",
+      "bytes": 183220,
+      "sha256_16": "83f1e200ab46cee7"
+    },
+    {
+      "path": "results/cls/rmia.json",
+      "bytes": 173426,
+      "sha256_16": "a64fd61dc9e5b902"
+    },
+    {
+      "path": "results/cls/rmia_online.json",
+      "bytes": 173077,
+      "sha256_16": "40b87e073b3286a0"
+    },
+    {
+      "path": "results/cls/temporal.json",
+      "bytes": 157942,
+      "sha256_16": "2dd183ef8cab1c19"
+    },
+    {
+      "path": "results/fcst/lira.json",
+      "bytes": 177148,
+      "sha256_16": "c570ca9e0f4d05d2"
+    },
+    {
+      "path": "results/fcst/lira_offline.json",
+      "bytes": 161538,
+      "sha256_16": "0b66251711dfc5ba"
+    },
+    {
+      "path": "results/fcst/loss.json",
+      "bytes": 335065,
+      "sha256_16": "cff1b4fa9b7289c3"
+    },
+    {
+      "path": "results/fcst/rmia.json",
+      "bytes": 156887,
+      "sha256_16": "1f8f524572cc2e7b"
+    },
+    {
+      "path": "results/fcst/rmia_online.json",
+      "bytes": 157100,
+      "sha256_16": "a8e3cfd4984b63d6"
+    },
+    {
+      "path": "results/fcst/temporal.json",
+      "bytes": 157472,
+      "sha256_16": "4aea27c181122641"
+    }
+  ]
+}
