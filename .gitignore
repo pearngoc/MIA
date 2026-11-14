@@ -81,3 +81,14 @@ colab_secrets.*
 # Triển khai k3s local cho node tuan-cao (đã gom 1 file, không commit)
 k8s/*.local.yaml
 **/*.local.yaml
+# Shared split artifacts must be committed
+!dataset/splits/*.npz
+
+# PatchTST checkpoints, cached signals, model outputs
+work/
+
+/patchtst_results
+experiment/patchtst/**
+experiment/patchtst
+experiment/patchtst-bk
+experiment/patchtst-bk/**
